@@ -18,7 +18,7 @@
 ## 2. System Architecture & Tooling
 
 ### 2.1 ReAct Loop Implementation
-*Diagram or description of the Thought-Action-Observation loop.*
+![Diagram image](image.png)
 
 ### 2.2 Tool Definitions (Inventory)
 | Tool Name | Input Format | Use Case |
