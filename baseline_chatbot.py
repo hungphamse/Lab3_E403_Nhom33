@@ -23,7 +23,7 @@ def run_shoe_baseline():
     
     system_prompt = (
         "Bạn là chuyên gia tư vấn bán giày. Hãy trả lời câu hỏi của người dùng một cách chuyên nghiệp. "
-        "Lưu ý: Bạn KHÔNG có quyền truy cập Internet hay cơ sở dữ liệu kho thực tế."
+        "Lưu ý: Bạn KHÔNG có quyền truy cập Internet hay cơ sở dữ liệu kho thực tế. Không trong phạm vi hiểu biết về tư vấn bán giày thì trả lời không hoặc hỏi lại"
     )
     
     print("=" * 50)
