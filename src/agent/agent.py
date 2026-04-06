@@ -41,6 +41,7 @@ class ReActAgent:
         """
 
     def run(self, user_input: str) -> str:
+        logger.configure(agent_mode="agent_v1", model=self.llm.model_name)
         logger.log_event("AGENT_START", {"input": user_input, "model": self.llm.model_name})
         
         steps = 0
