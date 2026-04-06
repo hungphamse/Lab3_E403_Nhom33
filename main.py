@@ -2,7 +2,7 @@ import os
 from dotenv import load_dotenv
 from src.core.openai_provider import OpenAIProvider
 from src.agent.agent import ReActAgent
-from src.tools.ecommerce_tools import check_stock, get_discount, calc_shipping
+from src.tools.shoe_tools import search_shoes_by_brand, check_shoe_availability, check_price
 
 def run_agent():
     load_dotenv()
@@ -18,19 +18,19 @@ def run_agent():
         api_key=api_key
     )
 
-    # 2. Define the Tools for the Agent (Notice how critical the descriptions are!)
+    # 2. Define the Tools for the Agent
     tools = [
         {
-            "name": "check_stock",
-            "description": "Queries inventory database. Input: item_sku (str) - The exact 8-character alphanumeric product ID. Returns: (int) Available quantity in units. Returns 0 if out of stock."
+            "name": "search_shoes_by_brand",
+            "description": "Tìm kiếm tất cả giày trong kho bằng tên hãng. Đầu vào: brand (str). Đầu ra: string danh sách SKU và tên giày."
         },
         {
-            "name": "get_discount",
-            "description": "Calculates new total after discount application. Input: promo_code (str) and cart_total (float) separated by a comma. Example: SAVE20, 2000.0. Returns: (float) Adjusted cart total."
+            "name": "check_shoe_availability",
+            "description": "Kiểm tra tồn kho thực tế. Đầu vào: sku (str). Đầu ra: số lượng đang có."
         },
         {
-            "name": "calc_shipping",
-            "description": "Calculates shipping rate. Input: weight_kg (float) and destination_zip (str) separated by a comma. Example: 1.5, 90210. Returns: (float) Shipping cost in USD."
+            "name": "check_price",
+            "description": "Lấy giá tiền chính xác của giày. Đầu vào: sku (str). Đầu ra: Giá tiền (USD)."
         }
     ]
 
