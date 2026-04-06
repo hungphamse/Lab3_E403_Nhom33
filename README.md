@@ -1,56 +1,124 @@
-# Lab 3: Chatbot vs ReAct Agent (Industry Edition)
+# Lab 3: Chatbot vs ReAct Agent
 
-Welcome to Phase 3 of the Agentic AI course! This lab focuses on moving from a simple LLM Chatbot to a sophisticated **ReAct Agent** with industry-standard monitoring.
+## Prerequisites
 
-## 🚀 Getting Started
+- **Python 3.10+**
+- An **OpenAI API key** (or Gemini API key, or a local GGUF model)
 
-### 1. Setup Environment
-Copy the `.env.example` to `.env` and fill in your API keys:
+## 1. Setup
+
+### Clone & install dependencies
+
+```bash
+cd Lab3_E403_Nhom33
+pip install -r requirements.txt
+```
+
+### Configure environment variables
+
+Copy the example file and fill in your keys:
+
 ```bash
 cp .env.example .env
 ```
 
-### 2. Install Dependencies
-```bash
-pip install -r requirements.txt
-```
+Edit `.env` with your preferred provider:
 
-### 3. Directory Structure
-- `src/tools/`: Extension point for your custom tools.
-
-## 🏠 Running with Local Models (CPU)
-
-If you don't want to use OpenAI or Gemini, you can run open-source models (like Phi-3) directly on your CPU using `llama-cpp-python`.
-
-### 1. Download the Model
-Download the **Phi-3-mini-4k-instruct-q4.gguf** (approx 2.2GB) from Hugging Face:
-- [Phi-3-mini-4k-instruct-GGUF](https://huggingface.co/microsoft/Phi-3-mini-4k-instruct-gguf)
-- Direct Download: [phi-3-mini-4k-instruct-q4.gguf](https://huggingface.co/microsoft/Phi-3-mini-4k-instruct-gguf/resolve/main/Phi-3-mini-4k-instruct-q4.gguf)
-
-### 2. Place Model in Project
-Create a `models/` folder in the root and move the downloaded `.gguf` file there.
-
-### 3. Update `.env`
-Change your `DEFAULT_PROVIDER` and set the path:
 ```env
-DEFAULT_PROVIDER=local
-LOCAL_MODEL_PATH=./models/Phi-3-mini-4k-instruct-q4.gguf
+# Required for OpenAI provider
+OPENAI_API_KEY=sk-...
+
+# Required for Gemini provider
+GEMINI_API_KEY=your_key_here
+
+# Provider selection: openai | google | local
+DEFAULT_PROVIDER=openai
+DEFAULT_MODEL=gpt-4o
 ```
 
-## 🎯 Lab Objectives
+## 2. How to Run
 
-1.  **Baseline Chatbot**: Observe the limitations of a standard LLM when faced with multi-step reasoning.
-2.  **ReAct Loop**: Implement the `Thought-Action-Observation` cycle in `src/agent/agent.py`.
-3.  **Provider Switching**: Swap between OpenAI and Gemini seamlessly using the `LLMProvider` interface.
-4.  **Failure Analysis**: Use the structured logs in `logs/` to identify why the agent fails (hallucinations, parsing errors).
-5.  **Grading & Bonus**: Follow the [SCORING.md](file:///Users/tindt/personal/ai-thuc-chien/day03-lab-agent/SCORING.md) to maximize your points and explore bonus metrics.
+### Option A — CLI ReAct Agent demo
 
-## 🛠️ How to Use This Baseline
-The code is designed as a **Production Prototype**. It includes:
-- **Telemetry**: Every action is logged in JSON format for later analysis.
-- **Robust Provider Pattern**: Easily extendable to any LLM API.
-- **Clean Skeletons**: Focus on the logic that matters—the agent's reasoning process.
+Runs a single hardcoded query through the ReAct agent and prints the thought-action-observation trace to the terminal.
 
----
+```bash
+python main.py
+```
 
-*Happy Coding! Let's build agents that actually work.*
+### Option B — CLI Baseline Chatbot demo
+
+Runs a shoe-purchase query through the plain chatbot (no tools) to demonstrate how the LLM hallucinates prices and stock data.
+
+```bash
+python baseline_chatbot.py
+```
+
+### Option C — Streamlit Web App (A/B comparison)
+
+Launches a web UI where you can type any query and see the **Baseline Chatbot** and **ReAct Agent** side-by-side.
+
+```bash
+streamlit run app.py
+```
+
+Then open the URL printed in the terminal (usually `http://localhost:8501`).
+
+## 3. Running Tests
+
+```bash
+pytest tests/ -v
+```
+
+To test the local Phi-3 model provider specifically:
+
+```bash
+python tests/test_local.py
+```
+
+## 4. Using a Local Model (CPU, no API key needed)
+
+1. Download the **Phi-3-mini-4k-instruct-q4.gguf** (~2.2 GB) from Hugging Face:
+   - [Download link](https://huggingface.co/microsoft/Phi-3-mini-4k-instruct-gguf/resolve/main/Phi-3-mini-4k-instruct-q4.gguf)
+
+2. Place the file in a `models/` folder at the project root:
+
+   ```
+   Lab3_E403_Nhom33/
+   └── models/
+       └── Phi-3-mini-4k-instruct-q4.gguf
+   ```
+
+3. Update `.env`:
+
+   ```env
+   DEFAULT_PROVIDER=local
+   LOCAL_MODEL_PATH=./models/Phi-3-mini-4k-instruct-q4.gguf
+   ```
+
+4. Run any of the commands from **Section 2** above — the local provider will be used automatically.
+
+## 5. Project Structure
+
+```
+Lab3_E403_Nhom33/
+├── main.py                  # CLI entry point — ReAct Agent demo
+├── baseline_chatbot.py      # CLI entry point — Baseline Chatbot demo
+├── app.py                   # Streamlit web app (side-by-side comparison)
+├── requirements.txt
+├── .env.example
+├── src/
+│   ├── agent/
+│   │   └── agent.py         # ReAct Agent implementation
+│   ├── core/
+│   │   ├── llm_provider.py  # Abstract LLM provider interface
+│   │   ├── openai_provider.py
+│   │   ├── gemini_provider.py
+│   │   └── local_provider.py
+│   ├── tools/
+│   │   └── shoe_tools.py    # E-commerce tool functions
+│   └── telemetry/           # JSON logging for agent traces
+├── tests/
+│   └── test_local.py
+└── report/
+```
