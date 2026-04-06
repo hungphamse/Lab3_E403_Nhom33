@@ -10,8 +10,18 @@
 
 *Describe your specific contribution to the codebase (e.g., implemented a specific tool, fixed the parser, etc.).*
 
-- **Modules Implementated**: [e.g., `src/tools/search_tool.py`]
-- **Code Highlights**: [Copy snippets or link file lines]
+- **Modules Implementated**: [e.g., `src/tools/shoe_tools.py`]
+- **Code Highlights**: ["def check_shoe_availability(sku: str) -> str:
+    """
+    Checks the inventory stock level for a specific shoe.
+    Input: sku (str) - The unique product ID (e.g., 'NK-8821').
+    Returns: (str) The available quantity, or out of dataset message if not found.
+    """
+    oku_upper = sku.upper()
+    if oku_upper not in SHOE_DATABASE:
+        return OUT_OF_DATASET_MSG
+    stock = SHOE_DATABASE[oku_upper]["stock"]
+    return f"{stock} units available." if stock > 0 else "0 units available (Out of stock)."]
 - **Documentation**: [Brief explanation of how your code interacts with the ReAct loop]
 
 ---
