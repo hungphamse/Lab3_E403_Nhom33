@@ -3,6 +3,7 @@ import re
 from typing import List, Dict, Any
 from src.core.llm_provider import LLMProvider
 from src.telemetry.logger import logger
+import ast
 
 class ReActAgent:
     """
